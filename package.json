@@ -1,0 +1,29 @@
+{
+  "name": "express-gateway-plugin-rewrite",
+  "version": "1.0.0",
+  "description": "Rewrite plugin for express-gateway",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ExpressGateway/express-gateway-plugin-rewrite.git"
+  },
+  "keywords": [
+    "express-gateway",
+    "rewrite"
+  ],
+  "author": "Vincenzo Chianese",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/ExpressGateway/express-gateway-plugin-rewrite/issues"
+  },
+  "homepage": "https://github.com/ExpressGateway/express-gateway-plugin-rewrite#readme",
+  "devDependencies": {
+    "express-gateway": "^1.1.1"
+  },
+  "dependencies": {
+    "http-rewrite-middleware": "^0.1.6"
+  }
+}
