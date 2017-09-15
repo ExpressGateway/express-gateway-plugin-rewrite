@@ -1,7 +1,7 @@
-const httpRewriteMiddlewarare = require("httpRewriteMiddleware");
+const httpRewriteMiddlewarare = require("http-rewrite-middleware");
 
 module.exports = {
-    version: 'v1',
+    version: '1.0.0',
     init: function (pluginContext) {
         pluginContext.registerPolicy({
             name: 'rewrite',
@@ -15,7 +15,7 @@ module.exports = {
         pluginContext.registerCondition({
             name: 'match',
             handler: (req, conditionConfig) => {
-
+                return true;
             }
         });
     }
