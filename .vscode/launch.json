@@ -1,15 +1,15 @@
 {
-        "version": "0.2.0",
-        "configurations": [
-            {
-                "type": "node",
-                "request": "launch",
-                "name": "Launch Program",
-                "restart": true,
-                "program": "${workspaceRoot}/server.js",
-                "env": {
-                    "LOG_LEVEL": "debug"
-                }
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Launch Program",
+            "restart": true,
+            "program": "${workspaceRoot}/test/server.js",
+            "env": {
+                "LOG_LEVEL": "debug"
             }
-        ]
-    }
+        }
+    ]
+}

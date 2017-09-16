@@ -18,11 +18,19 @@ policies:
   - oauth2
   - proxy
   - rate-limit
+  - rewrite
 pipelines:
   - name: basic
     apiEndpoints:
       - api
     policies:
+      - rewrite:
+          - condition:
+              name: 'match'
+              match: '/calendar/:test/hello'
+          - action:
+              rewrite: 'hello/:test/calendar'
+
       - proxy:
           - action:
               serviceEndpoint: httpbin
