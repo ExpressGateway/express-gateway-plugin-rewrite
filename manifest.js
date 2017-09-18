@@ -1,4 +1,4 @@
-const pathToRegExp = require("path-to-regexp");
+const pathToRegExp = require('path-to-regexp');
 
 module.exports = {
   version: '1.0.0',
@@ -6,7 +6,7 @@ module.exports = {
     pluginContext.registerPolicy({
       name: 'rewrite',
       policy: (actionParams) => {
-        const compiled_exp = pathToRegExp.compile(actionParams.rewrite);
+        const compiledExp = pathToRegExp.compile(actionParams.rewrite);
 
         return (req, res, next) => {
           let toUrl = null;
@@ -14,14 +14,14 @@ module.exports = {
           if (req.egContext.matchedCondition.plainRegEx)
             toUrl = req.url.replace(req.egContext.matchedCondition.plainRegEx, actionParams.rewrite);
           else
-            toUrl = compiled_exp(req.egContext.matchedCondition);
+            toUrl = compiledExp(req.egContext.matchedCondition);
 
           if (!actionParams.redirect) {
             req.url = toUrl;
             return next();
           }
 
-          res.statusCode = actionParams.redirect === "permanent" ? 301 : 302;
+          res.statusCode = actionParams.redirect === 'permanent' ? 301 : 302;
           res.setHeader('Location', toUrl);
           res.end();
         }
@@ -41,7 +41,7 @@ module.exports = {
 
         if (extractedParameters !== null) {
           req.egContext.matchedCondition = { plainRegEx };
-          keys.forEach((key, index) => req.egContext.matchedCondition[key.name] = extractedParameters[index + 1]);
+          keys.forEach((key, index) => { req.egContext.matchedCondition[key.name] = extractedParameters[index + 1] });
 
           return true;
         }
