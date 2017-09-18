@@ -2,6 +2,7 @@ const pathToRegExp = require('path-to-regexp');
 
 module.exports = {
   version: '1.0.0',
+  policies: ['rewrite'],
   init: function (pluginContext) {
     pluginContext.registerPolicy({
       name: 'rewrite',
