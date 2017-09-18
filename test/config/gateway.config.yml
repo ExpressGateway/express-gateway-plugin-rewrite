@@ -17,12 +17,21 @@ pipelines:
     apiEndpoints:
       - api
     policies:
-      - rewrite:
-          - condition:
-              name: 'match'
-              match: '/calendar/:test/hello'
-          - action:
-              rewrite: 'hello/:test/calendar'
+      -
+        rewrite:
+          -
+            condition:
+              name: match
+              match: /gigino/:code
+            action:
+              rewrite: /status/:code
+              redirect: permanent
+          -
+            condition:
+              name: match
+              match: ^/js/(.*)$
+            action:
+              rewrite: /src/js/$1
 
       - proxy:
           - action:

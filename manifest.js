@@ -7,14 +7,21 @@ module.exports = {
       name: 'rewrite',
       policy: (actionParams) => {
         const compiled_exp = pathToRegExp.compile(actionParams.rewrite);
+
         return (req, res, next) => {
-          const toUrl = compiled_exp(req.egContext.matchedCondition);
+          let toUrl = null;
+
+          if (req.egContext.matchedCondition.plainRegEx)
+            toUrl = req.url.replace(req.egContext.matchedCondition.plainRegEx, actionParams.rewrite);
+          else
+            toUrl = compiled_exp(req.egContext.matchedCondition);
+
           if (!actionParams.redirect) {
             req.url = toUrl;
             return next();
           }
 
-          res.statusCode = actionParams.redirect;
+          res.statusCode = actionParams.redirect === "permanent" ? 301 : 302;
           res.setHeader('Location', toUrl);
           res.end();
         }
@@ -24,14 +31,18 @@ module.exports = {
     pluginContext.registerCondition({
       name: 'match',
       handler: (req, conditionConfig) => {
+        let plainRegEx = null;
+
         const keys = [];
-        const regExp = pathToRegExp(conditionConfig.match, keys);
+        const regExpFromPath = pathToRegExp(conditionConfig.match, keys);
+        const extractedParameters =
+          regExpFromPath.exec(req.url) ||
+          ((plainRegEx = new RegExp(conditionConfig.match)).exec(req.url));
 
-        const data = regExp.exec(req.url);
+        if (extractedParameters !== null) {
+          req.egContext.matchedCondition = { plainRegEx };
+          keys.forEach((key, index) => req.egContext.matchedCondition[key.name] = extractedParameters[index + 1]);
 
-        if (data !== null) {
-          req.egContext.matchedCondition = {};
-          keys.forEach((key, index) => req.egContext.matchedCondition[key.name] = data[index + 1]);
           return true;
         }
 
