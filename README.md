@@ -25,14 +25,14 @@ policies:
     rewrite:
       -
         condition:
-          name: match
+          name: pathmatch
           match: /tina/:code
         action:
           rewrite: /status/:code
           redirect: permanent
       -
         condition:
-          name: match
+          name: regexpmatch
           match: ^/js/(.*)$
         action:
           rewrite: /src/js/$1
@@ -40,9 +40,15 @@ policies:
 
 ### Configuration Parameters
 
-`condition.match`: Express Path or RegExp corresponding to the url pattern to look for.
+`condition.pathmatch`: Express Path corresponding to the url pattern to look for.
 
-`action.rewrite`: Express Path or RegExp corresponding to the url pattern to rewrite.
+`condition.regexpmatch`: RegExp corresponding to the url pattern to look for.
+
+**Note:** if you provide both expression, the first one that will match will make the Gateway jump to the policy
+directly.
+
+`action.rewrite`: Express Path or RegExp corresponding to the url pattern to rewrite. The format should match the
+one used in the condition.
 
 `action.redirect`: If omitted, a rewrite action will be performed. When set to `permanent`, it'll redirect the request
 with status code `301`; for all other values, it'll emit a `302`.
