@@ -30,20 +30,32 @@ module.exports = {
     });
 
     pluginContext.registerCondition({
-      name: 'match',
+      name: 'pathmatch',
       handler: (req, conditionConfig) => {
-        let plainRegEx = null;
-
         const keys = [];
         const regExpFromPath = pathToRegExp(conditionConfig.match, keys);
-        const extractedParameters =
-          regExpFromPath.exec(req.url) ||
-          ((plainRegEx = new RegExp(conditionConfig.match)).exec(req.url));
+        const extractedParameters = regExpFromPath.exec(req.url);
+
+        if (extractedParameters !== null) {
+          req.egContext.matchedCondition = {};
+          keys.forEach((key, index) => { req.egContext.matchedCondition[key.name] = extractedParameters[index + 1] });
+          return true;
+        }
+
+        return false;
+      }
+    });
+
+
+    pluginContext.registerCondition({
+      name: 'regexpmatch',
+      handler: (req, conditionConfig) => {
+        const plainRegEx = new RegExp(conditionConfig.match);
+
+        const extractedParameters = plainRegEx.exec(req.url);
 
         if (extractedParameters !== null) {
           req.egContext.matchedCondition = { plainRegEx };
-          keys.forEach((key, index) => { req.egContext.matchedCondition[key.name] = extractedParameters[index + 1] });
-
           return true;
         }
 

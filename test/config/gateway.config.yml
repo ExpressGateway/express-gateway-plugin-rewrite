@@ -21,14 +21,14 @@ pipelines:
         rewrite:
           -
             condition:
-              name: match
+              name: pathmatch
               match: /gigino/:code
             action:
               rewrite: /status/:code
               redirect: permanent
           -
             condition:
-              name: match
+              name: regexpmatch
               match: ^/js/(.*)$
             action:
               rewrite: /src/js/$1
