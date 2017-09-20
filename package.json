@@ -21,6 +21,8 @@
   },
   "homepage": "https://github.com/ExpressGateway/express-gateway-plugin-rewrite#readme",
   "devDependencies": {
+    "axios": "^0.16.2",
+    "express": "^4.15.4",
     "express-gateway": "^1.2.0",
     "jest": "^21.1.0"
   },

@@ -8,7 +8,7 @@ apiEndpoints:
     host: '*'
 serviceEndpoints:
   httpbin:
-    url: 'https://httpbin.org'
+    url: 'http://localhost:8081'
 policies:
   - proxy
   - rewrite
@@ -25,11 +25,10 @@ pipelines:
               match: /api/:route*
             action:
               rewrite: /api/v1/:route
-              redirect: 301
           -
             condition:
               name: pathmatch
-              match: /gigino/:code
+              match: /tina/:code
             action:
               rewrite: /status/:code
               redirect: 301
@@ -39,6 +38,12 @@ pipelines:
               match: ^/js/(.*)$
             action:
               rewrite: /src/js/$1
+          -
+            condition:
+              name: regexpmatch
+              match: ^/css/(.*)$
+            action:
+              rewrite: /src/css/$1
 
       - proxy:
           - action:
