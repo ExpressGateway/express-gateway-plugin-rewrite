@@ -25,7 +25,7 @@ pipelines:
               match: /gigino/:code
             action:
               rewrite: /status/:code
-              redirect: permanent
+              redirect: 301
           -
             condition:
               name: regexpmatch

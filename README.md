@@ -29,7 +29,7 @@ policies:
           match: /tina/:code
         action:
           rewrite: /status/:code
-          redirect: permanent
+          redirect: 302
       -
         condition:
           name: regexpmatch
@@ -50,8 +50,8 @@ directly.
 `action.rewrite`: Express Path or RegExp corresponding to the url pattern to rewrite. The format should match the
 one used in the condition.
 
-`action.redirect`: If omitted, a rewrite action will be performed. When set to `permanent`, it'll redirect the request
-with status code `301`; for all other values, it'll emit a `302`.
+`action.redirect`: If omitted, a rewrite action will be performed. When set to a number, it'll redirect the request
+with the provided status code.
 
 ## Want to make your own plugin?
 

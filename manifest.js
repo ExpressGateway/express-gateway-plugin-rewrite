@@ -22,7 +22,7 @@ module.exports = {
             return next();
           }
 
-          res.redirect(actionParams.redirect === 'permanent' ? 301 : 302, toUrl);
+          res.redirect(actionParams.redirect, toUrl);
         }
       }
     });
