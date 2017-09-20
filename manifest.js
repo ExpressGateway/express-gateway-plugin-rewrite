@@ -15,7 +15,7 @@ module.exports = {
           if (req.egContext.matchedCondition.plainRegEx)
             toUrl = req.url.replace(req.egContext.matchedCondition.plainRegEx, actionParams.rewrite);
           else
-            toUrl = compiledExp(req.egContext.matchedCondition);
+            toUrl = decodeURIComponent(compiledExp(req.egContext.matchedCondition));
 
           if (!actionParams.redirect) {
             req.url = toUrl;
