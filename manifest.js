@@ -22,9 +22,7 @@ module.exports = {
             return next();
           }
 
-          res.statusCode = actionParams.redirect === 'permanent' ? 301 : 302;
-          res.setHeader('Location', toUrl);
-          res.end();
+          res.redirect(actionParams.redirect === 'permanent' ? 301 : 302, toUrl);
         }
       }
     });
