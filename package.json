@@ -4,7 +4,7 @@
   "description": "Rewrite plugin for express-gateway",
   "main": "manifest.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest --env node"
   },
   "repository": {
     "type": "git",
@@ -21,7 +21,8 @@
   },
   "homepage": "https://github.com/ExpressGateway/express-gateway-plugin-rewrite#readme",
   "devDependencies": {
-    "express-gateway": "^1.2.0"
+    "express-gateway": "^1.2.0",
+    "jest": "^21.1.0"
   },
   "dependencies": {
     "path-to-regexp": "^2.0.0"
