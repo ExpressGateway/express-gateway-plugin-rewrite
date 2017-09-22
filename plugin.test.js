@@ -4,10 +4,13 @@ const gateway = require('express-gateway');
 const express = require('express');
 
 let Application = undefined;
+let axiosInstance = undefined;
 
 beforeAll((done) => {
-  axios.defaults.baseURL = 'http://localhost:8080/';
-  axios.defaults.validateStatus = (status) => status < 400;
+  axiosInstance = axios.create({
+    baseURL: 'http://localhost:8080/',
+    validateStatus: (status) => status < 400
+  });
 
   const app = express();
   const hello = (req, res) => res.status(200).send('Hello!');
@@ -26,7 +29,7 @@ afterAll((done) => {
 
 describe('Route path', () => {
   it('should receive a redirect response', () => {
-    return axios
+    return axiosInstance
       .get('/tina/318', { maxRedirects: 0 })
       .then((response) => {
         expect(response.status).toBe(301);
@@ -35,7 +38,7 @@ describe('Route path', () => {
   });
 
   it('should redirect to the correct resource', () => {
-    return axios
+    return axiosInstance
       .get('/tina/318')
       .then((response) => {
         expect(response.status).toBe(318);
@@ -43,7 +46,7 @@ describe('Route path', () => {
   });
 
   it('should receive a redirect response', () => {
-    return axios
+    return axiosInstance
       .get('/api/users/nick', { maxRedirects: 0 })
       .then((response) => {
         expect(response.status).toBe(200);
@@ -53,7 +56,7 @@ describe('Route path', () => {
 
 describe('RegExp path', () => {
   it('should redirect to the correct resource', () => {
-    return axios
+    return axiosInstance
       .get('/js/resource.js')
       .then((response) => {
         expect(response.status).toBe(200);
@@ -64,6 +67,6 @@ describe('RegExp path', () => {
 describe('Non existing path', () => {
   it('should preserve the not found status code', () => {
     expect.assertions(1);
-    return expect(axios.get('/css/resource.css')).rejects.toBeDefined();
+    return expect(axiosInstance.get('/css/resource.css')).rejects.toBeDefined();
   });
 });
