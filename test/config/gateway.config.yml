@@ -1,0 +1,51 @@
+http:
+  port: 8080
+admin:
+  port: 9876
+  hostname: localhost
+apiEndpoints:
+  api:
+    host: '*'
+serviceEndpoints:
+  httpbin:
+    url: 'http://localhost:8081'
+policies:
+  - proxy
+  - rewrite
+pipelines:
+  - name: basic
+    apiEndpoints:
+      - api
+    policies:
+      -
+        rewrite:
+          -
+            condition:
+              name: pathmatch
+              match: /api/:route*
+            action:
+              rewrite: /api/v1/:route
+          -
+            condition:
+              name: pathmatch
+              match: /tina/:code
+            action:
+              rewrite: /status/:code
+              redirect: 301
+          -
+            condition:
+              name: regexpmatch
+              match: ^/js/(.*)$
+            action:
+              rewrite: /src/js/$1
+          -
+            condition:
+              name: regexpmatch
+              match: ^/css/(.*)$
+            action:
+              rewrite: /src/css/$1
+
+      - proxy:
+          - action:
+              serviceEndpoint: httpbin
+              changeOrigin: true
