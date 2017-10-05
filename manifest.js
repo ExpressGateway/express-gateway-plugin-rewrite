@@ -1,6 +1,9 @@
+// @ts-check
+/// <reference path="./node_modules/express-gateway/plugin.d.ts" />
 const pathToRegExp = require('path-to-regexp');
 
-module.exports = {
+/** @type {ExpressGateway.Plugin} */
+const plugin = {
   version: '1.0.0',
   policies: ['rewrite'],
   init: function (pluginContext) {
@@ -62,3 +65,5 @@ module.exports = {
     });
   }
 }
+
+module.exports = plugin;
