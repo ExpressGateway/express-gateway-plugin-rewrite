@@ -1,5 +1,5 @@
 // @ts-check
-/// <reference path="./node_modules/express-gateway/plugin.d.ts" />
+/// <reference path="./node_modules/express-gateway/index.d.ts" />
 const pathToRegExp = require('path-to-regexp');
 
 /** @type {ExpressGateway.Plugin} */
