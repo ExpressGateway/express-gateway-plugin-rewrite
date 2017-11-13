@@ -1,6 +1,6 @@
 {
   "name": "express-gateway-plugin-rewrite",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "description": "Rewrite plugin for express-gateway",
   "main": "manifest.js",
   "scripts": {
@@ -21,12 +21,13 @@
   },
   "homepage": "https://github.com/ExpressGateway/express-gateway-plugin-rewrite#readme",
   "devDependencies": {
-    "axios": "^0.16.2",
-    "express": "^4.15.5",
-    "express-gateway": "git://github.com/expressGateway/express-gateway.git",
+    "@types/json-schema": "^4.0.0",
+    "axios": "^0.17.1",
+    "express": "^4.16.2",
+    "express-gateway": "github:expressgateway/express-gateway",
     "jest": "^21.2.1"
   },
   "dependencies": {
-    "path-to-regexp": "^2.0.0"
+    "path-to-regexp": "^2.1.0"
   }
 }

@@ -1,5 +1,6 @@
 // @ts-check
 /// <reference path="./node_modules/express-gateway/index.d.ts" />
+
 const pathToRegExp = require('path-to-regexp');
 
 /** @type {ExpressGateway.Plugin} */
@@ -9,6 +10,22 @@ const plugin = {
   init: function (pluginContext) {
     pluginContext.registerPolicy({
       name: 'rewrite',
+      schema: {
+        type: 'object',
+        properties: {
+          rewrite: {
+            type: 'string',
+            description: `Express Path or RegExp corresponding to the url pattern to rewrite.
+                          The format should match the one used in the condition.`
+
+          },
+          redirect: {
+            type: 'integer',
+            description: `If omitted, a rewrite action will be performed.
+                          When set to a number, it'll redirect the request with the provided status code.`
+          },
+        }
+      },
       policy: (actionParams) => {
         const compiledExp = pathToRegExp.compile(actionParams.rewrite);
 
@@ -44,6 +61,16 @@ const plugin = {
         }
 
         return false;
+      },
+      schema: {
+        type: 'object',
+        properties: {
+          match: {
+            type: 'string',
+            description: 'The url pattern to look for'
+          }
+        },
+        required: ['match']
       }
     });
 
@@ -61,6 +88,16 @@ const plugin = {
         }
 
         return false;
+      },
+      schema: {
+        type: 'object',
+        properties: {
+          match: {
+            type: 'string',
+            description: 'The url pattern to look for'
+          },
+        },
+        required: ['match']
       }
     });
   }
