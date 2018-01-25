@@ -24,7 +24,7 @@
     "@types/json-schema": "^4.0.0",
     "axios": "^0.17.1",
     "express": "^4.16.2",
-    "express-gateway": "github:expressgateway/express-gateway",
+    "express-gateway": "*",
     "jest": "^21.2.1"
   },
   "dependencies": {
