@@ -21,11 +21,11 @@
   },
   "homepage": "https://github.com/ExpressGateway/express-gateway-plugin-rewrite#readme",
   "devDependencies": {
-    "@types/json-schema": "^4.0.0",
+    "@types/json-schema": "^6.0.0",
     "axios": "^0.17.1",
     "express": "^4.16.2",
     "express-gateway": "1.6.1",
-    "jest": "^21.2.1"
+    "jest": "^22.1.4"
   },
   "dependencies": {
     "path-to-regexp": "^2.1.0"
