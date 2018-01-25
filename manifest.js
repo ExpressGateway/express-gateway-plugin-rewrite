@@ -11,7 +11,7 @@ const plugin = {
     pluginContext.registerPolicy({
       name: 'rewrite',
       schema: {
-        $id: 'express-gateway-rewrite-policy',
+        $id: 'http://express-gateway.io/schemas/policies/rewrite.json',
         type: 'object',
         properties: {
           rewrite: {
@@ -64,7 +64,7 @@ const plugin = {
         return false;
       },
       schema: {
-        $id: 'express-gateway-rewrite-pathmatch',
+        $id: 'http://express-gateway.io/schemas/conditions/pathmatch.json',
         type: 'object',
         properties: {
           match: {
@@ -92,7 +92,7 @@ const plugin = {
         return false;
       },
       schema: {
-        $id: 'express-gateway-rewrite-regexpmatch',
+        $id: 'http://express-gateway.io/schemas/conditions/regexpmatch.json',
         type: 'object',
         properties: {
           match: {
