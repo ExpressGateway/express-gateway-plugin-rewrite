@@ -1,7 +1,10 @@
 // @ts-check
 /// <reference path="./node_modules/express-gateway/index.d.ts" />
 
+const debug = require('debug')
 const pathToRegExp = require('path-to-regexp');
+
+const log = debug('express-gateway-plugin-rewrite')
 
 /** @type {ExpressGateway.Plugin} */
 const plugin = {
@@ -29,20 +32,29 @@ const plugin = {
       },
       policy: (actionParams) => {
         const compiledExp = pathToRegExp.compile(actionParams.rewrite);
+        log('policy: executing', { compiledExp })
 
         return (req, res, next) => {
           let toUrl = null;
+          log('policy inner function: executing')
 
-          if (req.egContext.matchedCondition.plainRegEx)
+          if (req.egContext.matchedCondition.plainRegEx) {
+            log('policy inner function: matched condition plainRegEx', { plainRegex: req.egContext.matchedCondition.plainRegEx, rewrite: actionParams.rewrite })
             toUrl = req.url.replace(req.egContext.matchedCondition.plainRegEx, actionParams.rewrite);
-          else
+          } else {
+            log('policy inner function: !plainRegEx', { matchedCondition: req.egContext.matchedCondition })
             toUrl = decodeURIComponent(compiledExp(req.egContext.matchedCondition));
+          }
+
+          log('policy inner function: toUrl', { toUrl })
 
           if (!actionParams.redirect) {
             req.url = toUrl;
+            log('policy inner function: set req.url', { reqUrl: req.url, toUrl })
             return next();
           }
 
+          log('policy inner function: redirecting', { redirect: actionParams.redirect })
           res.redirect(actionParams.redirect, toUrl);
         }
       }
@@ -51,16 +63,22 @@ const plugin = {
     pluginContext.registerCondition({
       name: 'pathmatch',
       handler: (req, conditionConfig) => {
+        log('pathmatch handler: executing')
         const keys = [];
         const regExpFromPath = pathToRegExp(conditionConfig.match, keys);
         const extractedParameters = regExpFromPath.exec(req.url);
+        log('pathmatch handler: params', { regExpFromPath, extractedParameters })
 
         if (extractedParameters !== null) {
           req.egContext.matchedCondition = {};
-          keys.forEach((key, index) => { req.egContext.matchedCondition[key.name] = extractedParameters[index + 1] });
+          keys.forEach((key, index) => {
+            req.egContext.matchedCondition[key.name] = extractedParameters[index + 1]
+            log(`pathmatch handler: matchedCondition`, { matchedCondition: req.egContext.matchedCondition[key.name], key })
+          });
           return true;
         }
 
+        log('pathmatch handler: no extractedParameters')
         return false;
       },
       schema: {
@@ -80,15 +98,19 @@ const plugin = {
     pluginContext.registerCondition({
       name: 'regexpmatch',
       handler: (req, conditionConfig) => {
+        log('regexpmatch handler: executing')
         const plainRegEx = new RegExp(conditionConfig.match);
 
         const extractedParameters = plainRegEx.exec(req.url);
+        log('regexpmatch handler: params', { plainRegEx, extractedParameters })
 
         if (extractedParameters !== null) {
           req.egContext.matchedCondition = { plainRegEx };
+          log(`regexpmatch handler: matchedCondition`, { matchedCondition: req.egContext.matchedCondition })
           return true;
         }
 
+        log('regexpmatch handler: no extractedParameters')
         return false;
       },
       schema: {
