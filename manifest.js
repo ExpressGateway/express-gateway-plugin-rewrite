@@ -25,7 +25,7 @@ const plugin = {
             description: `If omitted, a rewrite action will be performed.
                           When set to a number, it'll redirect the request with the provided status code.`
           },
-        }
+        }, required: ['rewrite']
       },
       policy: (actionParams) => {
         const compiledExp = pathToRegExp.compile(actionParams.rewrite);
