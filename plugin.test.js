@@ -36,7 +36,7 @@ beforeAll( async () => {
 
   Application = app.listen(8081);
 
-});
+}, 60000);
 
 afterAll((done) => {
   server.kill('SIGTERM');
