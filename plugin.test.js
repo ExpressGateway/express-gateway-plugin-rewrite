@@ -1,12 +1,27 @@
 const axios = require('axios').default;
 const path = require('path');
-const gateway = require('express-gateway');
 const express = require('express');
+const proc = require('child_process')
 
 let Application = undefined;
 let axiosInstance = undefined;
+let gatewayTestInstance = undefined;
 
-beforeAll((done) => {
+function startServer () {
+  return new Promise(
+    (resolve, reject) => {
+      server = proc.spawn('node', ['./test/server.js']);
+      server.stdout.on('data', (data)=>{
+        const chk = /gateway http server listening on/g;
+        if (chk.test(data)) {
+          resolve('server started');          
+        } 
+    });
+  });  
+}
+
+beforeAll( async () => {
+  await startServer();
   axiosInstance = axios.create({
     baseURL: 'http://localhost:8080/',
     validateStatus: (status) => status < 400
@@ -19,11 +34,12 @@ beforeAll((done) => {
   app.get('/src/js/*', hello);
   app.get('/api/v1/*', hello)
 
-  Application = app.listen(8081, done);
+  Application = app.listen(8081);
 
 });
 
 afterAll((done) => {
+  server.kill('SIGTERM');
   Application.close(done);
 })
 
