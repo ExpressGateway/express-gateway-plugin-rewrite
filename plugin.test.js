@@ -1,15 +1,33 @@
 const axios = require('axios').default;
 const path = require('path');
-const gateway = require('express-gateway');
 const express = require('express');
+const proc = require('child_process');
 
 let Application = undefined;
 let axiosInstance = undefined;
+let gatewayTestInstance = undefined;
 
-beforeAll((done) => {
+function startServer() {
+  return new Promise((resolve, reject) => {
+    const serverPath = path.join(__dirname, 'test');
+    server = proc.spawn('node', [`${serverPath}/server.js`]);
+    server.stdout.on('data', data => {
+      const chk = /gateway http server listening on/g;
+      if (chk.test(data)) {
+        resolve();
+      }
+    });
+    server.on('exit', data => {
+      reject('server ended');
+    });
+  });
+}
+
+beforeAll(async () => {
+  await startServer();
   axiosInstance = axios.create({
     baseURL: 'http://localhost:8080/',
-    validateStatus: (status) => status < 400
+    validateStatus: status => status < 400
   });
 
   const app = express();
@@ -17,38 +35,36 @@ beforeAll((done) => {
 
   app.get('/status/:code', (req, res) => res.sendStatus(req.params.code));
   app.get('/src/js/*', hello);
-  app.get('/api/v1/*', hello)
+  app.get('/api/v1/*', hello);
 
-  Application = app.listen(8081, done);
+  Application = app.listen(8081);
+}, 60000);
 
-});
-
-afterAll((done) => {
+afterAll(done => {
+  server.kill('SIGTERM');
   Application.close(done);
-})
+});
 
 describe('Route path', () => {
   it('should receive a redirect response', () => {
     return axiosInstance
       .get('/tina/318', { maxRedirects: 0 })
-      .then((response) => {
+      .then(response => {
         expect(response.status).toBe(301);
         expect(response.headers).toHaveProperty('location', '/status/318');
       });
   });
 
   it('should redirect to the correct resource', () => {
-    return axiosInstance
-      .get('/tina/318')
-      .then((response) => {
-        expect(response.status).toBe(318);
-      });
+    return axiosInstance.get('/tina/318').then(response => {
+      expect(response.status).toBe(318);
+    });
   });
 
   it('should receive a redirect response', () => {
     return axiosInstance
       .get('/api/users/nick', { maxRedirects: 0 })
-      .then((response) => {
+      .then(response => {
         expect(response.status).toBe(200);
       });
   });
@@ -56,11 +72,9 @@ describe('Route path', () => {
 
 describe('RegExp path', () => {
   it('should redirect to the correct resource', () => {
-    return axiosInstance
-      .get('/js/resource.js')
-      .then((response) => {
-        expect(response.status).toBe(200);
-      });
+    return axiosInstance.get('/js/resource.js').then(response => {
+      expect(response.status).toBe(200);
+    });
   });
 });
 
