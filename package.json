@@ -23,7 +23,7 @@
   "homepage": "https://github.com/ExpressGateway/express-gateway-plugin-rewrite#readme",
   "devDependencies": {
     "@types/json-schema": "^7.0.3",
-    "axios": "^0.18.0",
+    "axios": "^0.21.1",
     "express": "^4.16.4",
     "express-gateway": "^1.15.0",
     "jest": "^24.5.0",
