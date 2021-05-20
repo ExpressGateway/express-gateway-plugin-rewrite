@@ -27,7 +27,7 @@
     "express": "^4.16.4",
     "express-gateway": "^1.15.0",
     "jest": "^24.5.0",
-    "semantic-release": "^15.13.3"
+    "semantic-release": "^17.2.3"
   },
   "dependencies": {
     "path-to-regexp": "^3.0.0"
